@@ -1,20 +1,74 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// In App.js in a new project
 
-export default function App() {
+import * as React from "react";
+import { View, Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from "./screens/LoginScreen";
+import OnboardingScreen from "./screens/OnboardingScreen";
+import WelcomeScreen from "./screens/WelcomeScreen";
+import { useFonts } from "expo-font";
+import RegisterScreen from "./screens/RegisterScreen";
+import HomeScreen from "./screens/HomeScreen";
+import Colors from "./helpers/Colors";
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+  const [fontsLoaded] = useFonts({
+    calistoga: require("./assets/fonts/Calistoga-Regular.ttf"),
+    sen: require("./assets/fonts/Sen-VariableFont_wght.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    // Font is still loading, return loading indicator or splash screen
+    return null;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Onboarding"
+          component={OnboardingScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{ headerShown: false, headerStatusBarHeight: 0 }}
+        />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+            headerStyle: {
+              borderBottomWidth: 0, // Remove bottom border
+              headerTransparent: true,
+              backgroundColor: "#fff",
+            },
+            headerTitle: "", // Hide the title
+            headerBackVisible: true, // Hide the back button
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{
+            headerShown: false,
+            headerStyle: {
+              borderBottomWidth: 0, // Remove bottom border
+              headerTransparent: true,
+              backgroundColor: "#fff",
+            },
+            headerTitle: "", // Hide the title
+            headerBackVisible: true, // Hide the back button
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
